@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>السعادة | Saa'da Elite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --prm: #818cf8; --sec: #10b981; --dark: #020617; }
+        body { font-family: 'Cairo', sans-serif; background: var(--dark); color: white; margin: 0; text-align: center; }
+        .nav { padding: 25px 50px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .logo { font-size: 2.5rem; font-weight: 900; color: var(--prm); }
+        .container { max-width: 900px; margin: auto; padding: 60px 20px; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); padding: 40px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px; }
+        input, textarea { width: 90%; padding: 15px; border-radius: 12px; border: none; margin-bottom: 15px; background: #334155; color: white; text-align: center; font-family: 'Cairo'; }
+        .btn { width: 95%; padding: 18px; border-radius: 12px; border: none; font-weight: 900; cursor: pointer; font-size: 1.2rem; }
+        .btn-prm { background: #4f46e5; color: white; }
+        .btn-sec { background: transparent; border: 2px solid var(--sec); color: var(--sec); }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <div class="logo">السعادة</div>
+        <a href="login.html" style="color: var(--prm); text-decoration: none; font-weight: bold;">دخول النظام 🔒</a>
+    </div>
+    <div class="container">
+        <h1>إمبراطورية الأتمتة واللوجستيات</h1>
+        <div class="glass-card">
+            <h2 style="color: var(--sec)">📊 حاسبة التوفير</h2>
+            <input type="number" id="budget" placeholder="ميزانية التسويق شهرياً (₪)">
+            <button class="btn btn-sec" onclick="calc()">حلل بياناتي</button>
+            <div id="res" style="margin-top:20px; font-size: 1.8rem; font-weight: bold;"></div>
+        </div>
+        <div class="glass-card">
+            <h2 style="color: var(--prm)">📩 انضم للنخبة</h2>
+            <form id="crm-form">
+                <input type="text" name="name" placeholder="الاسم الكامل" required>
+                <input type="tel" name="phone" placeholder="رقم الهاتف" required>
+                <textarea name="msg" placeholder="كيف نطور عملك؟"></textarea>
+                <button type="submit" class="btn btn-prm">إرسال للنظام</button>
+            </form>
+            <div id="status" style="margin-top:15px;"></div>
+        </div>
+    </div>
+    <script>
+        function calc() {
+            let b = document.getElementById('budget').value;
+            if(b) document.getElementById('res').innerText = "+" + Math.floor(b * 0.45) + " ₪ توفير";
+        }
+        document.getElementById('crm-form').addEventListener('submit', e => {
+            e.preventDefault();
+            document.getElementById('status').innerText = "جاري الإرسال...";
+            fetch('https://sheetdb.io/api/v1/axpo7bqvw3y0w', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ data: [{ "customer_name": e.target.name.value, "customer_phone": e.target.phone.value, "customer_message": e.target.msg.value, "date": new Date().toLocaleString() }] })
+            }).then(() => { document.getElementById('status').innerText = "تم التسجيل بنجاح!"; e.target.reset(); });
+        });
+    </script>
+</body>
+</html>
